@@ -1,0 +1,32 @@
+{% extends "./base.html" %}
+{% load static %}
+
+{% block head %}
+<script src={% static 'main/post.js'%}> </script>
+{% endblock head %}
+
+{% block body %}
+    {% for blog in blogs %}
+        <h2> {{blog.author}} </h2>
+        <p> Subscribers: </p>
+        <ul>
+            {% for subscriber in blog.subscribers.all %}
+            <li>{{subscriber}}</li>
+            {% endfor %}
+        </ul>
+        <button id="post-btn" name={{blog.id}}>subscribe</button>
+        <p />
+        <p />
+        <p />
+    {% endfor %}
+
+
+    <script>
+        const button = document.getElementById('post-btn');
+
+        button.addEventListener('click', async _ => {
+            postData('/blogs', {"id": button.name}, _ => {});
+        });
+    </script>
+
+{% endblock body%}
