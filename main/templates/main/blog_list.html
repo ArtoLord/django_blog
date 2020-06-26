@@ -14,7 +14,7 @@
             <li>{{subscriber}}</li>
             {% endfor %}
         </ul>
-        <button id="post-btn" name={{blog.id}}>subscribe</button>
+        <button id="post-btn" name={{blog.id}}>subscribe/unsubscribe</button>
         <p />
         <p />
         <p />
@@ -25,7 +25,7 @@
         const button = document.getElementById('post-btn');
 
         button.addEventListener('click', async _ => {
-            postData('/blogs', {"id": button.name}, _ => {});
+            postData('/blogs', {"id": button.name}, _ => {location.reload()});
         });
     </script>
 

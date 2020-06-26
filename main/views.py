@@ -6,10 +6,11 @@ from django.http.response import HttpResponseBadRequest, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views import View
-from .models import Blog
+from .models import Blog, Post
 
 class BlogView(View):
     
+    @method_decorator(login_required)    
     def get(self, request:HttpRequest):
         context = {
             "blogs": Blog.objects.all()
@@ -27,9 +28,11 @@ class BlogView(View):
             return HttpResponseBadRequest()
         
         blog = blog_set.get()
-        blog.subscribers.add(request.user)
+        if not blog.subscribers.filter(id = request.user.id):
+            blog.subscribers.add(request.user)
+        else:
+            blog.subscribers.remove(request.user)
         blog.save()
         
         return HttpResponse()
     
-
