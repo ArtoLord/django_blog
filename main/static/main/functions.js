@@ -15,13 +15,12 @@ function getCookie(name) {
 
 function postData(where, data, onSuccess) {
     data['csrfmiddlewaretoken'] = getCookie('csrftoken');
-    console.log(data);
     $.ajax({
         url: where,
         type: 'POST',
         data: data,
-        success: function (msg) {
-            onSuccess()
+        success: (msg) => {
+            onSuccess(msg)
         },
     });
 }

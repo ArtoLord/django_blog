@@ -2,11 +2,11 @@
 {% load static %}
 
 {% block head %}
-<script src={% static 'main/post.js'%}> </script>
+<script src={% static 'main/functions.js'%}> </script>
 {% endblock head %}
 
 {% block body %}
-    {% for blog in blogs %}
+    {% for blog, is_subscribed in blogs %}
         <h2> {{blog.author}} </h2>
         <p> Subscribers: </p>
         <ul>
@@ -14,19 +14,22 @@
             <li>{{subscriber}}</li>
             {% endfor %}
         </ul>
-        <button id="post-btn" name={{blog.id}}>subscribe/unsubscribe</button>
-        <p />
-        <p />
-        <p />
+        {% if is_subscribed %}
+        <button id="blog-btn{{blog.id}}" onclick="btn_click({{blog.id}})">unsubscribe</button>
+        {% endif %}
+        {% if not is_subscribed %}
+        <button id="blog-btn{{blog.id}}" onclick="btn_click({{blog.id}})">subscribe</button>
+        {% endif %}
+        <hr>
+        
     {% endfor %}
-
-
     <script>
-        const button = document.getElementById('post-btn');
-
-        button.addEventListener('click', async _ => {
-            postData('/blogs', {"id": button.name}, _ => {location.reload()});
-        });
+        function btn_click(id){
+            const button = document.getElementById('blog-btn' + id);
+            postData('/blogs', {"id": id}, _ => {
+                    location.reload();
+                });
+        }
     </script>
 
 {% endblock body%}
