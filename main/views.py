@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views import View
 from .models import Blog, Post
+from typing import Union
 
 class BlogView(View):
     
@@ -53,6 +54,19 @@ class NewsView(View):
         return render(request, 'main/news.html', context)
     
 class PostView(View):
+    
+    @method_decorator(login_required)    
+    def get(self, request:HttpRequest):
+        post_id = request.GET.get("id")
+        if not post_id:
+            return HttpResponseBadRequest()
+        
+        post_set = Post.objects.filter(id=post_id)
+        if not post_set:
+            return HttpResponseBadRequest()
+        post: Post = post_set.get()
+        
+        return render(request, 'main/post.html', {"post": post})
     
     @method_decorator(login_required)
     def post(self, request:HttpRequest):
