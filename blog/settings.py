@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import blog.settings_local as local
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,12 +21,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 't9obi#7el)ubifg%*69b)f*d_%&x@#k4k63+o4cynva8b^#*w-'
+SECRET_KEY = local.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = local.DEBUG
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = local.ALLOWED_HOSTS
+
+HOSTNAME = local.HOSTNAME
 
 
 # Application definition
@@ -40,7 +43,12 @@ INSTALLED_APPS = [
     'main'
 ]
 
-STATIC_URL="/static/"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = local.EMAIL_HOST
+EMAIL_USE_TLS = True
+EMAIL_PORT = local.EMAIL_PORT
+EMAIL_HOST_USER = local.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = local.EMAIL_HOST_PASSWORD
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

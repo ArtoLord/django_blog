@@ -9,3 +9,4 @@ media
 .vscode
 .mypy*
 mypy*
+blog/settings_local.py

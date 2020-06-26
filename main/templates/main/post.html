@@ -1,0 +1,32 @@
+{% extends "./base.html" %}
+{% load static %}
+
+{% block head %}
+<script src={% static 'main/functions.js'%}> </script>
+{% endblock head %}
+
+{% block body %}
+    <h2> {{post.header}} </h2>
+        {%if viewed %} <button id="btn_viewed{{post.id}}" onclick="viewed({{post.id}})">not viewed</button>{% endif %}
+        {%if not viewed %} <button id="btn_viewed{{post.id}}" onclick="viewed({{post.id}})">viewed</button>{% endif %}
+        <p>
+        {{post.created_at|date}}
+        <p>{{post.body}}</p>
+        <hr>
+    <script>
+        function viewed(id) {
+            const button = document.getElementById('btn_viewed' + id);
+            postData('/post', {"id": id}, response => {
+                if (response === "true"){
+                    button.firstChild.data = "not viewed"
+                }
+                else {
+                    button.firstChild.data = "viewed"
+                }
+                
+                });
+        };
+    </script>
+
+
+{% endblock body%}
