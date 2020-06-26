@@ -3,12 +3,12 @@ from django.db.models.manager import BaseManager
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.http.request import HttpRequest
-from django.http.response import HttpResponseBadRequest, HttpResponse
+from django.http.response import HttpResponseBadRequest, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views import View
 from .models import Blog, Post
-from typing import Union
+from .forms import PostForm
 
 class BlogView(View):
     
@@ -88,3 +88,18 @@ class PostView(View):
         post.save()
         return HttpResponse('true')
 
+class CreatePost(View):
+    
+    @method_decorator(login_required)    
+    def get(self, request:HttpRequest):
+        return render(request, 'main/create_post.html', {"form": PostForm()})
+    
+    @method_decorator(login_required)    
+    def post(self, request:HttpRequest):
+        post = PostForm(request.POST)
+        if not post.is_valid():
+            return HttpResponseBadRequest()
+        blog = request.user.blog
+        Post.objects.create(header=post.data['header'], body=post.data['body'], blog=blog)
+        return HttpResponseRedirect("/")
+    

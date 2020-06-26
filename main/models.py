@@ -8,7 +8,7 @@ from blog.settings import HOSTNAME
 
 
 class Blog(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.OneToOneField(User, on_delete=models.CASCADE, related_name="blog")
     subscribers = models.ManyToManyField(User, related_name="subscribes")
     
 class Post(models.Model):
